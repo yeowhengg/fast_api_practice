@@ -1,0 +1,23 @@
+{$DOMAIN} {
+
+    handle_path /api/v1/* {
+        reverse_proxy backend:80 {
+            header_up Host {upstream_hostport}
+            header_up X-Real-IP {remote_addr}
+            header_up X-Forwarded-Host {host}
+        }
+      }
+
+
+    handle /pgadmin4* {
+        redir /pgadmin4 /pgadmin4/ permanent
+        reverse_proxy pg_admin:80 {
+            header_up X-Scheme {scheme}
+            header_up X-Script-Name "/pgadmin4"
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-Proto {scheme}
+        }
+      }
+    }
+
+
